@@ -1,4 +1,4 @@
-
+//este proyecto se creo hoy dia
 package vista;
 
 import javax.swing.JFrame;
