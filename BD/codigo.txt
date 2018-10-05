@@ -1,0 +1,26 @@
+//tabla donde se almacenara los datos de los expositores//
+create table conferencista(
+idConf serial not null,
+nombre varchar(10) not null,
+apPaterno varchar(11) not null,
+apMAterno varchar(11) not null,
+direccion varchar(11) not null,
+email varchar(11) not null,
+telefono numeric not null
+)
+//agregado de la llave primaria//
+alter table conferencista
+add constraint pk_idConf_pk primary key(idconf)
+
+//tabla donde se almacenara los datos del administrador y secretaria la cual podran iniciar el isstema con 
+seguridad usuario y clave// 
+
+create table usuario(
+id_usuario serial not null,
+usuario varchar(15),
+clave text not null)
+
+//agregado de la llave primaria//ç
+
+alter table usuario
+add constraint id_usuario_pk primary key(id_usuario)
