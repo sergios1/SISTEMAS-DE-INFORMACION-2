@@ -27,7 +27,7 @@ public class DimensionesPantalla {
         ventanaDimension = Toolkit.getDefaultToolkit();
         dimensiones = ventanaDimension.getScreenSize();//Le pasamos las dimensiones de pantalla a dimensiones
         tamanioLetra = 5; //Valor por defecto del tamanio de letra en caso de error
-        TamPanX = dimensiones.width;//IOptenemos las dimensiones de la pantalla (X = Horizontal)
+        TamPanX = dimensiones.width;//Optenemos las dimensiones de la pantalla (X = Horizontal)
         TamPanY = dimensiones.height;//OPtenemos las dimensiones de la pantalla (Y = Vertical)
         a = ((float) TamPanX)*1F;//Tamaño horizontal en float *0.25F
         b = ((float)(TamPanY))*1F;//Tamaño horizontal en float *0.731489F
