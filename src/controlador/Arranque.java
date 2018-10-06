@@ -11,5 +11,7 @@ public class Arranque {
 		// TODO Auto-generated method stub
 		//ventaSesion sesion = new ventaSesion();
 		new VentanaOrganizador("Organizador", "ORGANIZADOR DE EVENTOS", "icono.png").setVisible(true);
+		VentanaPrincipal ventana= new VentanaPrincipal();
+		ventana.setVisible(true);
 	}
 }
