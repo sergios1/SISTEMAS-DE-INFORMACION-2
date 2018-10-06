@@ -1,13 +1,14 @@
 package vista;
 
-import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
+import java.awt.*;
+import java.awt.event.*;
 import javax.swing.*;
-
-
-public class VentanaRegistroExpositores extends JFrame implements ActionListener{
+/**
+*
+* @author Gustavo
+* 
+*/
+public class VentanaRegistroExpositores extends JDialog implements ActionListener{
 	
 	private JPanel panelFondo;
 	private JLabel labelTitulo, labelNombreExpositor, labelAP, labelAM, 
@@ -15,10 +16,10 @@ public class VentanaRegistroExpositores extends JFrame implements ActionListener
 	private JTextField fieldNombreExpositor, fieldAP, fieldAM, 
 	fieldDireccion, fieldEmail, fieldTelefono;
 	private JButton botonCancelar,botonRegistrar;
-	private DimensionesPantalla dimPan;
-	public VentanaRegistroExpositores(){
-		
-		dimPan = new DimensionesPantalla();
+	private Herramientas dimPan;
+	public VentanaRegistroExpositores(Frame padre, boolean bloquear){
+		super(padre, bloquear);
+		dimPan = new Herramientas();
 		this.setSize(dimPan.PenX(50), dimPan.PenY(70));
 		this.setLocationRelativeTo(null);
 		this.setResizable(false);
@@ -75,29 +76,27 @@ public class VentanaRegistroExpositores extends JFrame implements ActionListener
 		labelTelefono.setHorizontalAlignment(SwingConstants.RIGHT);
 		panelFondo.add(labelTelefono);
 		
-		
-		
-		fieldNombreExpositor.setBounds(dimPan.PenX(25), dimPan.PenY(10), dimPan.PenX(10), dimPan.PenY(5));
+		fieldNombreExpositor.setBounds(dimPan.PenX(25), dimPan.PenY(10), dimPan.PenX(10), dimPan.PenY(4.5F));
 		panelFondo.add(fieldNombreExpositor);
 		
-		fieldAP.setBounds(dimPan.PenX(25), dimPan.PenY(15), dimPan.PenX(10), dimPan.PenY(5));
+		fieldAP.setBounds(dimPan.PenX(25), dimPan.PenY(15), dimPan.PenX(10), dimPan.PenY(4.5F));
 		panelFondo.add(fieldAP);
 		
-		fieldAM.setBounds(dimPan.PenX(25), dimPan.PenY(20), dimPan.PenX(10), dimPan.PenY(5));
+		fieldAM.setBounds(dimPan.PenX(25), dimPan.PenY(20), dimPan.PenX(10), dimPan.PenY(4.5F));
 		panelFondo.add(fieldAM);
 		
-		fieldDireccion.setBounds(dimPan.PenX(25), dimPan.PenY(25), dimPan.PenX(10), dimPan.PenY(5));
+		fieldDireccion.setBounds(dimPan.PenX(25), dimPan.PenY(25), dimPan.PenX(10), dimPan.PenY(4.5F));
 		panelFondo.add(fieldDireccion);
 		
-		fieldEmail.setBounds(dimPan.PenX(25), dimPan.PenY(30), dimPan.PenX(10), dimPan.PenY(5));
+		fieldEmail.setBounds(dimPan.PenX(25), dimPan.PenY(30), dimPan.PenX(10), dimPan.PenY(4.5F));
 		panelFondo.add(fieldEmail);
 		
-		fieldTelefono.setBounds(dimPan.PenX(25), dimPan.PenY(35), dimPan.PenX(10), dimPan.PenY(5));
+		fieldTelefono.setBounds(dimPan.PenX(25), dimPan.PenY(35), dimPan.PenX(10), dimPan.PenY(4.5F));
 		panelFondo.add(fieldTelefono);
 		
 		
 		botonCancelar = new JButton("CANCELAR");
-		botonCancelar.setBounds(dimPan.PenX(10), dimPan.PenY(50), dimPan.PenX(10), dimPan.PenY(5));
+		botonCancelar.setBounds(dimPan.PenX(10), dimPan.PenY(50), dimPan.PenX(10), dimPan.PenY(4.5F));
 		botonCancelar.addActionListener(this);
 		panelFondo.add(botonCancelar);
 		
@@ -105,7 +104,6 @@ public class VentanaRegistroExpositores extends JFrame implements ActionListener
 		botonRegistrar.setBounds(dimPan.PenX(30), dimPan.PenY(50), dimPan.PenX(10), dimPan.PenY(5));
 		botonRegistrar.addActionListener(this);
 		panelFondo.add(botonRegistrar);
-		
 		
 	}
 	
@@ -120,11 +118,4 @@ public class VentanaRegistroExpositores extends JFrame implements ActionListener
 			
 		}
 	}
-	
-	public static void main(String args []){
-		
-		new VentanaRegistroExpositores().setVisible(true);
-		
-	}
-
 }

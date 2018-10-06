@@ -1,5 +1,10 @@
-package vista;
-
+package controlador;
+import vista.*;
+/**
+*
+* @author Gustavo
+* 
+*/
 public class Arranque {
 
 	public static void main(String[] args) {

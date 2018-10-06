@@ -38,20 +38,29 @@ public class VentanaUsuario extends JFrame{
 		this.setExtendedState(6);// 6 es para expandir la pantalla 
 		this.setLocationRelativeTo(null);
 		menuBar = new JMenuBar();
+		menuBar.setBackground(Color.DARK_GRAY);
 		this.setJMenuBar(menuBar);
 		menuArchivo = new JMenu("Archivo");
+		menuArchivo.setForeground(new Color(155, 191, 42));
 		menuBar.add(menuArchivo);
 		
-		menuAutor = new JMenu("Información");
+		menuAutor = new JMenu("Créditos");
+		menuAutor.setForeground(new Color(155, 191, 42));
 		menuBar.add(menuAutor);
 		
 		itemCerrarSesion = new JMenuItem("Cerrar sesión");
+		itemCerrarSesion.setForeground(new Color(155, 191, 42));
+		itemCerrarSesion.setBackground(Color.DARK_GRAY);
 		menuArchivo.add(itemCerrarSesion);
 		
 		itemSalir = new JMenuItem("Cerrar programa");
+		itemSalir.setForeground(new Color(155, 191, 42));
+		itemSalir.setBackground(Color.DARK_GRAY);
 		menuArchivo.add(itemSalir);
 		
 		itemAcerca = new JMenuItem("Acerca de...");
+		itemAcerca.setForeground(new Color(155, 191, 42));
+		itemAcerca.setBackground(Color.DARK_GRAY);
 		menuAutor.add(itemAcerca);
 		
 		scrollVentana = new JScrollPane();
@@ -79,34 +88,33 @@ public class VentanaUsuario extends JFrame{
 		panel11 = new JPanel();
 		panel12 = new JPanel();
 		panel21 = new JPanel();
-		panel21.setLayout(new GridLayout(1, 1));
+		panel21.setLayout(new GridLayout(1, 5));
 		panel22 = new JPanel();
 		panel22.setLayout(new GridLayout(2, 2));
-		
-		//panel12.setLayout(new GridLayout(3, 2, 10, 10));
 		panel12.setLayout(new FlowLayout());
 		
 		panel1.add(panel11);
 		panel1.add(panel12);
 		panel2.add(panel21, BorderLayout.WEST);
 		panel2.add(panel22, BorderLayout.EAST);
-		panel3.setLayout(new GridLayout(5, 1));
-		panel11.setLayout(new GridLayout(1, 1));
+		panel3.setLayout(new GridLayout(3, 1));
+		panel11.setLayout(new GridLayout(1, 2));
 		
 		panel12.add(new JLabel(""));
 		panel12.add(new JLabel(""));
 		
-		labelPiePagina = new JLabel("Sistemas de información II - 2018");
-		labelPiePagina.setForeground(Color.BLACK);
+		labelPiePagina = new JLabel("© Sistemas de información II - 2018");
+		labelPiePagina.setForeground(new Color(138,145,141));
+		labelPiePagina.setFont(new Font("Times New Roman", 1, dimPan.tamanioLetra(25)));
 		labelPiePagina.setHorizontalAlignment(SwingConstants.CENTER);
 		panel3.add(new JLabel(" "));
 		panel3.add(labelPiePagina);
-		panel3.add(new JLabel(" "));
+		//panel3.add(new JLabel(" "));
 		scrollVentana.setViewportView(panelFondo);
 		
 		labelTitulo = new JLabel(titulo);
 		labelTitulo.setHorizontalAlignment(SwingConstants.CENTER);
-		labelTitulo.setFont(new Font("Andale Mono", 1, dimPan.tamanioLetra(50)));
+		labelTitulo.setFont(new Font("Andale Mono", 1, dimPan.tamanioLetra(48)));
 		labelTitulo.setForeground(Color.DARK_GRAY);
 		panel11.add(labelTitulo);
 		
