@@ -1,0 +1,123 @@
+package controlador;
+
+public class ValidacionDatos 
+{
+
+	public ValidacionDatos() {
+
+	}
+
+	public String eliminarEspacio(String texto) {// Este metodo eliminar los espacios
+													// innecesarios
+		String textoAuxiar = texto.trim();
+		String textoFinal = "";
+		int espacios = 0;
+
+		for (int i = 0; i < textoAuxiar.length(); i++) {
+			if (textoAuxiar.charAt(i) == ' ') {
+				espacios++;
+			} else
+				espacios = 0;
+			if (espacios <= 1) {
+				textoFinal += textoAuxiar.charAt(i);
+			}
+		}
+
+		return textoFinal;
+
+	}
+	
+	public boolean validarAlfabeto(String textoAlfabetico){
+		boolean caracterValido = true;
+		for(int i = 0; i < textoAlfabetico.length();i++){
+			if(textoAlfabetico.charAt(i)== '~'|| textoAlfabetico.charAt(i)=='´'||
+					textoAlfabetico.charAt(i)== '0'|| textoAlfabetico.charAt(i)=='1'||
+					textoAlfabetico.charAt(i)== '2'|| textoAlfabetico.charAt(i)=='3'||
+					textoAlfabetico.charAt(i)== '4'|| textoAlfabetico.charAt(i)=='5'||
+					textoAlfabetico.charAt(i)== '6'|| textoAlfabetico.charAt(i)=='7'||
+					textoAlfabetico.charAt(i)== '8'|| textoAlfabetico.charAt(i)=='9'||
+					textoAlfabetico.charAt(i)== '-'|| textoAlfabetico.charAt(i)=='_'||
+					textoAlfabetico.charAt(i)== '='|| textoAlfabetico.charAt(i)=='*'||
+					textoAlfabetico.charAt(i)== '&'|| textoAlfabetico.charAt(i)=='$'||
+					textoAlfabetico.charAt(i)== '@'|| textoAlfabetico.charAt(i)=='!'||
+					textoAlfabetico.charAt(i)== '¡'|| textoAlfabetico.charAt(i)=='+'||
+					textoAlfabetico.charAt(i)== '/'|| textoAlfabetico.charAt(i)=='^'||
+					textoAlfabetico.charAt(i)== '%'|| textoAlfabetico.charAt(i)=='('||
+					textoAlfabetico.charAt(i)== ')'|| textoAlfabetico.charAt(i)=='{'||
+					textoAlfabetico.charAt(i)== '}'|| textoAlfabetico.charAt(i)=='['||
+					textoAlfabetico.charAt(i)== ']'|| textoAlfabetico.charAt(i)=='?'||
+					textoAlfabetico.charAt(i)== '¿'|| textoAlfabetico.charAt(i)=='<'||
+					textoAlfabetico.charAt(i)== '>'|| textoAlfabetico.charAt(i)=='#'||
+					textoAlfabetico.charAt(i)== '-'|| textoAlfabetico.charAt(i)=='.'||
+					textoAlfabetico.charAt(i)== ':'|| textoAlfabetico.charAt(i)==';'||
+					textoAlfabetico.charAt(i)== '"'|| textoAlfabetico.charAt(i)=='|'||
+					textoAlfabetico.charAt(i)== ','|| textoAlfabetico.charAt(i)==';'
+					
+					){
+				caracterValido = false;
+				break;
+			}
+			
+		}
+		return caracterValido;
+	}
+
+	public boolean correoCorrecto(String correo) {// Este metodo verifica y valida el
+													// Correo electrónico 
+		String email = correo.trim();
+		int puntos = 0, espacios = 0, arrobas = 0, caracteresEspeciales = 0;
+		boolean inavilidarPorPosicion = true;
+		for (int i = 0; i < email.length(); i++) {
+			if (i == 0 || i == email.length() - 1) {//Controla de que no inicie ni termine en . o @
+				if (email.charAt(i) == '.' || email.charAt(i) == '@') {
+					inavilidarPorPosicion = false;
+					break;
+				}
+			}
+			
+			if (i < email.length() - 2 && (email.charAt(i) == '@' || email.charAt(i) == '.')) {//Controla que no exista @@ o ..
+				if (email.charAt(i) == email.charAt(i + 1)) {
+					inavilidarPorPosicion = false;
+					break;
+				}
+			}
+
+			if (email.charAt(i) == '.') {
+				puntos++;
+			} else if (email.charAt(i) == ' ') {
+				espacios++;
+			} else if (email.charAt(i) == '@') {
+				arrobas++;
+			} else if (email.charAt(i) == '´' || email.charAt(i) == '*' || email.charAt(i) == '~'
+					|| email.charAt(i) == '<' || email.charAt(i) == '=' || email.charAt(i) == '>'
+					|| email.charAt(i) == '&' || email.charAt(i) == '$' || email.charAt(i) == '^'
+					|| email.charAt(i) == '}' || email.charAt(i) == '{' || email.charAt(i) == 'ñ'
+					|| email.charAt(i) == 'Ñ' || email.charAt(i) == '#' || email.charAt(i) == '¿'
+					|| email.charAt(i) == '?' || email.charAt(i) == '+' || email.charAt(i) == '['
+					|| email.charAt(i) == ']' || email.charAt(i) == '(' || email.charAt(i) == ')'
+					|| email.charAt(i) == '/' || email.charAt(i) == '"' || email.charAt(i) == '!'
+					|| email.charAt(i) == '~' || email.charAt(i) == '¡' || email.charAt(i) == ';'
+					|| email.charAt(i) == ',' || email.charAt(i) == ':' || email.charAt(i) == '%')  {
+				//Controla que no tenga caracteres especiales
+				caracteresEspeciales++;
+			}
+		}
+
+		if (puntos > 0 && espacios == 0 && arrobas == 1 && caracteresEspeciales == 0 && inavilidarPorPosicion) {
+
+			return true;
+
+		} else return false;
+			
+	}
+
+	public static void main(String args[]) {
+		String texto = "   ABAD RAMOS MALDONADO  ";
+		System.out.println(texto);
+		System.out.println(new ValidacionDatos().eliminarEspacio(texto)+ " "+new ValidacionDatos().validarAlfabeto(texto));
+		System.out.println(" el correo electronico es: " + new ValidacionDatos().correoCorrecto("    aarrmmgmail.com"));
+
+	}
+}
+
+	
