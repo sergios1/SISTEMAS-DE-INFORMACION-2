@@ -18,7 +18,7 @@ public class LabelImagen {
         fondo = new ImageIcon(dimPan.navegarPorProyecto(nombreArchivo));
         propiedadesFondo = new ImageIcon(fondo.getImage().getScaledInstance(imagen.getWidth(), imagen.getHeight(), Image.SCALE_DEFAULT));
         imagen.setIcon(propiedadesFondo);
-        imagen.setHorizontalAlignment(SwingConstants.RIGHT);
+        imagen.setHorizontalAlignment(SwingConstants.CENTER);
 		
 		return imagen;
 	}
