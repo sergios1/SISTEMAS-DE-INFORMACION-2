@@ -1,26 +1,131 @@
+DATABASE
+NAME:CONFERENCIA
+ROL:POSTGRES
+CREATE DATABASE "Conferencia"
+  
+WITH OWNER = postgres
+       
+ENCODING = 'UTF8'
+       
+TABLESPACE = pg_default
+     
+LC_COLLATE = 'Spanish_Spain.1252'
+    
+LC_CTYPE = 'Spanish_Spain.1252'
+       
+CONNECTION LIMIT = -1;
+
 //tabla donde se almacenara los datos de los expositores//
-create table conferencista(
-idConf serial not null,
-nombre varchar(10) not null,
-apPaterno varchar(11) not null,
-apMAterno varchar(11) not null,
-direccion varchar(11) not null,
-email varchar(11) not null,
-telefono numeric not null
-)
-//agregado de la llave primaria//
-alter table conferencista
-add constraint pk_idConf_pk primary key(idconf)
+/*==============================================================*/
+/* Table: CONFERENCISTA                                         */
+/*==============================================================*/
+create table CONFERENCISTA
+(
+   IDCONFE             serial not null,
+   NOMCONFE             varchar(15) not null,
+   APELLIDOPATCONFE     varchar(15) not null,
+   APELLIDOMATCONFE     varchar(15) not null,
+   DIRCONFE             varchar(30) not null,
+   TELFCONFE            numeric(8,0) not null,
+   ESPECIALIDADCONF     varchar(11) not null,
+   *IDADMIN              integer
+);
+//llave primaria//
+alter table CONFERENCISTA
+ADD Constraint idCONFE_pk primary key(idCONFE)
+//llave foranea//
+alter table CONFERENCISTA
+add constraint idADMIN_fk foreign key(idadmin) references administrador
+on delete from cascade
+/*====================================================================*/
 
-//tabla donde se almacenara los datos del administrador y secretaria la cual podran iniciar el isstema con 
-seguridad usuario y clave// 
+//tabla de logueo al sistema// 
+/*==============================================================*/
+/* Table: USUARIO                                               */
+/*==============================================================*/
+create table USUARIO
+(
+   ID_USUARIO           SERIAL NOT NULL,
+   USUARIO              varchar(15)NOT NULL,
+   CLAVE                varchar(15) NOT NULL,
+   TIPO                 varchar(10) NOT NULL,
+   IDSECRE              intEGER,
+   IDADMIN              intEGER,
+   primary key (ID_USUARIO)
+);
+alter table USUARIO add constraint FK_ES_DE_TIPO foreign key (IDSECRE)
+      references SECRETARIA (IDSECRE) on delete restrict on update restrict;
+/*=================================================================*/
 
-create table usuario(
-id_usuario serial not null,
-usuario varchar(15),
-clave text not null)
+//tabla de datos de la secretaria que registrara estudiantes//
+/*==============================================================*/
+/* Table: SECRETARIA                                            */
+/*==============================================================*/
+create table SECRETARIA
+(
+   IDSECRE              SERIAL NOT NULL,
+   NOMBSECRE            varchar(15) NOT NULL,
+   APELLIDPATSECRE      varchar(15) NOT NULL,
+   APELLIDMATSECRE      varchar(15) NOT NULL,
+   DIRECCISECRE         varchar(30) NOT NULL,
+   TELFSECRE            numeric(8,0)NOT NULL,
+   ID_USUARIO           intEGER
 
-//agregado de la llave primaria//ç
+);
+//llave primaria//
+alter table SECRETARIA
+ADD Constraint idSECRE_pk primary key(idSECRE)
+//llave foranea//
+alter table SECRETARIA
+add constraint id_USUARIO_fk foreign key(id_USUARIO) references USUARIO(ID_USUARIO)
+on delete from cascade
+/*===============================================================================*/
 
-alter table usuario
-add constraint id_usuario_pk primary key(id_usuario)
+//tabla de almacenamiento de datos de estudiantes registrados//
+/*==============================================================*/
+/* Table: ESTUDIANTE                                            */
+/*==============================================================*/
+create table ESTUDIANTE
+(
+   IDESTUD              serial not null,
+   NOMBREESTUD          varchar(15)not null,
+   APELLIDPATESTUD      varchar(15) not null,
+   APELLIDOMATESTUD     varchar(15) not null,
+   CIESTUD              numeric(10,0) not null,
+   DIRECESTUD           varchar(15)not null,
+   TELEFESTUD           numeric(8,0)not null,
+   EDADESTUD            integer not null,
+   *IDSECRE              integer
+);
+//llave primaria//
+alter table estudiante
+ADD Constraint idestud_pk primary key(idestud)
+//llave foranea//
+alter table estudiante
+add constraint idsecre_fk foreign key(idsecre) references secretaria
+on delete from cascade
+/*=================================================================*/
+
+//tabla de almacenamiento de datos del administrador el que registrara conferencistas//
+
+/*==============================================================*/
+/* Table: ADMINISTRADOR                                         */
+/*==============================================================*/
+create table ADMINISTRADOR
+(
+   IDADMIN              serial not null ,
+   NOMBREADMIN          varchar(15) not null,
+   APELLIDPATADMIN      varchar(15) not null,
+   APELLIDMATADMIN      varchar(15) not null,
+   DIRADMIN             varchar(15) not null,
+   TELFADMIN            integer not null,
+   *ID_USUARIO           integer
+);
+//llave primaria//
+alter table ADMINISTRADOR 
+ADD Constraint idadmin_pk primary key(idadmin)
+//llave foranea//
+alter table ADMINISTRADOR
+add constraint id_usuario_fk foreign key(id_usuario) references usuario 
+on delete from cascade
+/*==============================================================*/
