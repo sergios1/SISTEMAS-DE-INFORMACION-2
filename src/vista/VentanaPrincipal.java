@@ -1,14 +1,11 @@
 package vista;
 
-
-
 import javax.swing.*;
-
-
-
+import controlador.ValidacionDatos;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
 public class VentanaPrincipal extends JFrame implements ActionListener{
 	 
 	private Herramientas dimPan= new Herramientas();
@@ -17,60 +14,65 @@ public class VentanaPrincipal extends JFrame implements ActionListener{
 	private JLabel labelUno, labelHistoria, labelInformacion, labelUser, labelPass, labelPiePagina;
 	private JPasswordField fieldPass;
 	private JTextField fieldUser;
+	
+	private ValidacionDatos vd;
+	
 	private Toolkit herraminetas = Toolkit.getDefaultToolkit();
 	 /* 
 	  * Constructor
 	  * 
 	  */
-	//hola
+	
 	public VentanaPrincipal(){
-	this.setLayout(new BorderLayout());
-	//this.setExtendedState(6);
-	this.setSize(dimPan.PenX(60), dimPan.PenY(60));
-	this.setLocationRelativeTo(null);
-	this.setTitle("SISTEMA DE INFORMACION - CONFERENCIAS");
-	this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-	JScrollPane scrollVentana = new JScrollPane();
-	this.add(scrollVentana);
+		
+		vd = new ValidacionDatos();
+		this.setLayout(new BorderLayout());
+		//this.setExtendedState(6);
+		this.setSize(dimPan.PenX(75), dimPan.PenY(70));
+		this.setLocationRelativeTo(null);
+		this.setTitle("SISTEMA DE INFORMACION - CONFERENCIAS");
+		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+		JScrollPane scrollVentana = new JScrollPane();
+		this.add(scrollVentana);
+		
+		panelFondo = new JPanel();
+		panelFondo.setLayout(new BorderLayout());
+		panelFondo.setPreferredSize(new Dimension(dimPan.PenX(60), dimPan.PenY(60)));
+		scrollVentana.setViewportView(panelFondo);
+		
+		Image imagen = herraminetas.getImage(dimPan.navegarPorProyecto("icono.png"));
+		setIconImage(imagen);
+		
+		labelUno = new JLabel("SISTEMA DE CONFERENCIAS");
+		labelUno.setFont(new Font("Andale Mono", 1, dimPan.tamanioLetra(90)));
+		labelUno.setForeground(Color.DARK_GRAY);
+		
+		panel1 =new JPanel();
+		panel1.setBackground(new Color(155, 191, 42));
+		panelFondo.add(panel1,BorderLayout.NORTH);
+		panel1.add(labelUno);
 	
-	panelFondo = new JPanel();
-	panelFondo.setLayout(new BorderLayout());
-	panelFondo.setPreferredSize(new Dimension(dimPan.PenX(60), dimPan.PenY(60)));
-	scrollVentana.setViewportView(panelFondo);
-	
-	Image imagen = herraminetas.getImage(dimPan.navegarPorProyecto("icono.png"));
-	setIconImage(imagen);
-	
-	labelUno = new JLabel("SISTEMA DE CONFERENCIAS");
-	labelUno.setFont(new Font("Andale Mono", 1, dimPan.tamanioLetra(90)));
-	labelUno.setForeground(Color.DARK_GRAY);
-	
-	panel1 =new JPanel();
-	panel1.setBackground(new Color(155, 191, 42));
-	panelFondo.add(panel1,BorderLayout.NORTH);
-	panel1.add(labelUno);
-
-	panel2 =new JPanel();
-	panel2.setBackground(new Color(241, 228, 184));
-	//panel2.setLayout(new BorderLayout());
-	panelFondo.add(panel2, BorderLayout.WEST);
-	
-	panel3 =new JPanel();
-	panel3.setBackground(Color.DARK_GRAY);
-	panel3.setLayout(new BorderLayout());
-	panelFondo.add(panel3, BorderLayout.CENTER);
-	
-	panel4 =new JPanel();
-	panel4.setBackground(new Color(241, 228, 184));
-	//panel4.setLayout(new BorderLayout());
-	panelFondo.add(panel4, BorderLayout.EAST);
-	
-	panel5 =new JPanel();
-	panel5.setBackground(new Color(155, 191, 42));
-	panel5.setLayout(new GridLayout(5, 1));
-	panelFondo.add(panel5, BorderLayout.SOUTH);
-	
-	ponerObjetos();
+		panel2 =new JPanel();
+		panel2.setBackground(new Color(241, 228, 184));
+		//panel2.setLayout(new BorderLayout());
+		panelFondo.add(panel2, BorderLayout.WEST);
+		
+		panel3 =new JPanel();
+		panel3.setBackground(Color.DARK_GRAY);
+		panel3.setLayout(new BorderLayout());
+		panelFondo.add(panel3, BorderLayout.CENTER);
+		
+		panel4 =new JPanel();
+		panel4.setBackground(new Color(241, 228, 184));
+		//panel4.setLayout(new BorderLayout());
+		panelFondo.add(panel4, BorderLayout.EAST);
+		
+		panel5 =new JPanel();
+		panel5.setBackground(new Color(155, 191, 42));
+		panel5.setLayout(new GridLayout(5, 1));
+		panelFondo.add(panel5, BorderLayout.SOUTH);
+		
+		ponerObjetos();
 	}
 	/**
 	 * Este metodo dibuja los elementos en los paneles
@@ -108,7 +110,7 @@ public class VentanaPrincipal extends JFrame implements ActionListener{
 				+ "Expositor: Ing. Fulano Mendez<br>"
 				+ "Lugar: Auditorio de ciencias y tecnología.</html>";
 		
-		labelPiePagina = new JLabel("Sistemas de información II");
+		labelPiePagina = new JLabel("© Sistemas de información II - 2018");
 		labelPiePagina.setHorizontalAlignment(SwingConstants.CENTER);
 		panel5.add(new JLabel(""));
 		panel5.add(new JLabel(""));
@@ -118,7 +120,6 @@ public class VentanaPrincipal extends JFrame implements ActionListener{
 		labelInformacion.setForeground(Color.DARK_GRAY);
 		labelInformacion.setFont(new Font("Andale Mono", 1, dimPan.tamanioLetra(25)));
 		panel4.add(labelInformacion);
-		/////ojo
 		
 		panelSesion = new JPanel();
 		panelSesion.setOpaque(false);
@@ -133,8 +134,12 @@ public class VentanaPrincipal extends JFrame implements ActionListener{
 		labelPass.setForeground(Color.WHITE);
 		fieldPass = new JPasswordField();
 		botonAcceder = new JButton("ACCEDER");
-		botonAcceder.setBackground(Color.PINK);
+		botonAcceder.setBackground(new Color(173, 255, 47));
 		botonAcceder.addActionListener(this);
+		
+		fieldUser.setFont(new Font("Andale Mono", 1, dimPan.tamanioLetra(25)));
+		fieldPass.setFont(new Font("Andale Mono", 1, dimPan.tamanioLetra(25)));
+		botonAcceder.setFont(new Font("Andale Mono", 1, dimPan.tamanioLetra(25)));
 		
 		panelSesion.add(new JLabel(""));
 		panelSesion.add(labelUser);
@@ -158,19 +163,23 @@ public class VentanaPrincipal extends JFrame implements ActionListener{
 		panel3.add(img.labelImagen("inicio.png"), BorderLayout.NORTH);
 		
 	}
-	public static void main(String args []){
-		
-		new VentanaPrincipal().setVisible(true);
-		
-	}
+	
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		// TODO Auto-generated method stub
-		if(fieldUser.getText().equals("")||fieldPass.getText().equals("")){
-			JOptionPane.showMessageDialog(null, "Llena los dos campos");
+		String usuario = fieldUser.getText();
+		char contrasenia [] = fieldPass.getPassword();
+		String pass = "";
+		for(int i = 0; i < contrasenia.length;i++){
+			pass += contrasenia[i];
+		}
+		
+		if(usuario.equals("")||pass.equals("")){
+			JOptionPane.showMessageDialog(this, "Llena los dos campos", "Incompleto", JOptionPane.QUESTION_MESSAGE);
 		}else {
-			System.out.println("Iniciar sesión...!");
-			
+			if(vd.acceder(usuario, pass)){
+				this.dispose();
+			}
 		}
 	}
 }

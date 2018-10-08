@@ -1,10 +1,18 @@
 package controlador;
 
-public class ValidacionDatos 
-{
+import java.sql.*;
 
+import javax.swing.JOptionPane;
+
+import modelo.ConeccionBDPostgres;
+import vista.VentanaOrganizador;
+import vista.VentanaPrincipal;
+import vista.VentanaSecretario;
+
+public class ValidacionDatos {
+	private ConeccionBDPostgres con;
 	public ValidacionDatos() {
-
+		con = new ConeccionBDPostgres();
 	}
 
 	public String eliminarEspacio(String texto) {// Este metodo eliminar los espacios
@@ -30,7 +38,7 @@ public class ValidacionDatos
 	public boolean validarAlfabeto(String textoAlfabetico){
 		boolean caracterValido = true;
 		for(int i = 0; i < textoAlfabetico.length();i++){
-			if(textoAlfabetico.charAt(i)== '~'|| textoAlfabetico.charAt(i)=='Â´'||
+			if(textoAlfabetico.charAt(i)== '~'|| textoAlfabetico.charAt(i)=='´'||
 					textoAlfabetico.charAt(i)== '0'|| textoAlfabetico.charAt(i)=='1'||
 					textoAlfabetico.charAt(i)== '2'|| textoAlfabetico.charAt(i)=='3'||
 					textoAlfabetico.charAt(i)== '4'|| textoAlfabetico.charAt(i)=='5'||
@@ -40,13 +48,13 @@ public class ValidacionDatos
 					textoAlfabetico.charAt(i)== '='|| textoAlfabetico.charAt(i)=='*'||
 					textoAlfabetico.charAt(i)== '&'|| textoAlfabetico.charAt(i)=='$'||
 					textoAlfabetico.charAt(i)== '@'|| textoAlfabetico.charAt(i)=='!'||
-					textoAlfabetico.charAt(i)== 'Â¡'|| textoAlfabetico.charAt(i)=='+'||
+					textoAlfabetico.charAt(i)== '¡'|| textoAlfabetico.charAt(i)=='+'||
 					textoAlfabetico.charAt(i)== '/'|| textoAlfabetico.charAt(i)=='^'||
 					textoAlfabetico.charAt(i)== '%'|| textoAlfabetico.charAt(i)=='('||
 					textoAlfabetico.charAt(i)== ')'|| textoAlfabetico.charAt(i)=='{'||
 					textoAlfabetico.charAt(i)== '}'|| textoAlfabetico.charAt(i)=='['||
 					textoAlfabetico.charAt(i)== ']'|| textoAlfabetico.charAt(i)=='?'||
-					textoAlfabetico.charAt(i)== 'Â¿'|| textoAlfabetico.charAt(i)=='<'||
+					textoAlfabetico.charAt(i)== '¿'|| textoAlfabetico.charAt(i)=='<'||
 					textoAlfabetico.charAt(i)== '>'|| textoAlfabetico.charAt(i)=='#'||
 					textoAlfabetico.charAt(i)== '-'|| textoAlfabetico.charAt(i)=='.'||
 					textoAlfabetico.charAt(i)== ':'|| textoAlfabetico.charAt(i)==';'||
@@ -88,15 +96,15 @@ public class ValidacionDatos
 				espacios++;
 			} else if (email.charAt(i) == '@') {
 				arrobas++;
-			} else if (email.charAt(i) == 'Â´' || email.charAt(i) == '*' || email.charAt(i) == '~'
+			} else if (email.charAt(i) == '´' || email.charAt(i) == '*' || email.charAt(i) == '~'
 					|| email.charAt(i) == '<' || email.charAt(i) == '=' || email.charAt(i) == '>'
 					|| email.charAt(i) == '&' || email.charAt(i) == '$' || email.charAt(i) == '^'
-					|| email.charAt(i) == '}' || email.charAt(i) == '{' || email.charAt(i) == 'Ã±'
-					|| email.charAt(i) == 'Ã‘' || email.charAt(i) == '#' || email.charAt(i) == 'Â¿'
+					|| email.charAt(i) == '}' || email.charAt(i) == '{' || email.charAt(i) == '+'
+					|| email.charAt(i) == '‘' || email.charAt(i) == '#' || email.charAt(i) == '¿'
 					|| email.charAt(i) == '?' || email.charAt(i) == '+' || email.charAt(i) == '['
 					|| email.charAt(i) == ']' || email.charAt(i) == '(' || email.charAt(i) == ')'
 					|| email.charAt(i) == '/' || email.charAt(i) == '"' || email.charAt(i) == '!'
-					|| email.charAt(i) == '~' || email.charAt(i) == 'Â¡' || email.charAt(i) == ';'
+					|| email.charAt(i) == '~' || email.charAt(i) == '¡' || email.charAt(i) == ';'
 					|| email.charAt(i) == ',' || email.charAt(i) == ':' || email.charAt(i) == '%')  {
 				//Controla que no tenga caracteres especiales
 				caracteresEspeciales++;
@@ -110,7 +118,53 @@ public class ValidacionDatos
 		} else return false;
 			
 	}
-
+	public boolean acceder(String user, String pass ){ // Controla acceso de usuario
+		boolean ocultar = false;
+		String idBD = "";
+		String userBD = "";
+		String passBD = "";
+		String tipoUsuario = "";
+		ResultSet rs = con.inicioSesion(user, pass);
+		try {
+			while(rs.next()){
+				idBD = rs.getString("id_usuario");
+				userBD = rs.getString("USUARIO");
+				passBD = rs.getString("CLAVE");
+				tipoUsuario = rs.getString("TIPO");
+				System.out.println("Leido desde la base de datos: "+idBD+" "+userBD+" "+passBD+" "+tipoUsuario);
+			}
+			if(userBD.equals(user) && passBD.equals(pass) && !tipoUsuario.equals("null")){
+				if(tipoUsuario.equals("ORGANIZA")){//Si es organizador
+					VentanaOrganizador organizador = new VentanaOrganizador("Organizador", "ORGANIZADOR DE EVENTOS", "icono.png");
+					organizador.setVisible(true);
+					ocultar = true;
+				}else if(tipoUsuario.equals("SECRE")){//Si es Secretario
+					VentanaSecretario VentanaSecretario = new VentanaSecretario("Secreatrio", "CUENTA SECRETARIO", "icono.png");
+					VentanaSecretario.setVisible(true);
+					ocultar = true;
+				}else {
+					JOptionPane.showMessageDialog(null,
+							"El rol del usuario ingresado no existe!\nConsulte con el administrador",
+							"Sin rol", JOptionPane.ERROR_MESSAGE);
+				}
+				
+			}else if(tipoUsuario.equals("null")){
+				JOptionPane.showMessageDialog(null,
+						"No existe rol para el usuario ingresado!\nConsulte con el administrador",
+						"Inconsistencia", JOptionPane.NO_OPTION);
+			} else{
+				JOptionPane.showMessageDialog(null,
+						"Revise los campos!\nSi olvidó su contraseña\nconsulte con el administrador",
+						"Inconsistencia", JOptionPane.QUESTION_MESSAGE);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			System.out.println("Error..................!");
+			e.printStackTrace();
+		}
+		
+		return ocultar;
+	}
 	public static void main(String args[]) {
 		String texto = "   ABAD RAMOS MALDONADO  ";
 		System.out.println(texto);

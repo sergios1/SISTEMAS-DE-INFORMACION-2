@@ -77,7 +77,7 @@ public class VentanaUsuario extends JFrame{
 		panel1.setLayout(new GridLayout(1, 2, 10, 10));
 		panel1.setBackground(Color.RED);
 		panel2 = new JPanel();
-		panel2.setBackground(Color.GREEN);
+		panel2.setBackground(Color.GRAY);
 		panel3 = new JPanel();
 		
 		panelFondo.add(panel1, BorderLayout.NORTH);
@@ -127,7 +127,7 @@ public class VentanaUsuario extends JFrame{
 	}
 	
 	protected void mostrarAutores(){
-		String texto = "AUTORES:"+
+		String texto = "DESARROLLADORES:"+
 		
 				"\n- Abasto Argote Gustavo"+
 			
@@ -139,8 +139,10 @@ public class VentanaUsuario extends JFrame{
 				
 				"\n- Ramos Maldonado Abad"+
 				
-				"\n- Sarmiento Cadima Sergio Daniel".toUpperCase();
-		JOptionPane.showMessageDialog(null, texto.toUpperCase());
+				"\n- Sarmiento Cadima Sergio Daniel";
+		
+		ImageIcon icon = new ImageIcon("src/archivosmultimedia/creditos.png");
+		JOptionPane.showMessageDialog(this, texto.toUpperCase(), "Créditos", JOptionPane.PLAIN_MESSAGE, icon);
 	}
 	
 }
