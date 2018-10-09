@@ -16,38 +16,41 @@ public class PanelListas {
 	private JLabel labelTituloItem;
 	private JScrollPane scroll;
 	private Herramientas dimPan;
-	private String [] filas;
-	
-	public PanelListas(){
-		
+	private String[] filas;
+	private ResultSet rs;
+	DefaultTableModel tablaModel;
+
+	public PanelListas(ResultSet rs) {
+		this.rs = rs;
 		dimPan = new Herramientas();
+		tablaModel = new DefaultTableModel();
+		tabla = new JTable();
+		filas = new String[8];
 		/*
-		Object[][] datos=new Object();//Leer de la base de datos
-		String[] nombrecolumnas={"ID","NOMBRE","APELLIDO PATERNO","APELLIDO MATERNO","DIRECCION","E-MAIL","TELEFONO"};
-		tablaExpositores = new JTable(datos, nombrecolumnas);
-		*/
-		
+		 * Object[][] datos=new Object();//Leer de la base de datos String[]
+		 * nombrecolumnas={"ID","NOMBRE","APELLIDO PATERNO","APELLIDO MATERNO"
+		 * ,"DIRECCION","E-MAIL","TELEFONO"}; tablaExpositores = new
+		 * JTable(datos, nombrecolumnas);
+		 */
 		scroll = new JScrollPane();
-		
-		
+
 		labelTituloItem = new JLabel();
-		labelTituloItem.setBounds(0,0,dimPan.PenX(50), dimPan.PenY(10));
+		labelTituloItem.setBounds(0, 0, dimPan.PenX(50), dimPan.PenY(10));
 		labelTituloItem.setForeground(Color.WHITE);
 		labelTituloItem.setHorizontalAlignment(SwingConstants.CENTER);
 		labelTituloItem.setFont(new Font("Andale Mono", 1, dimPan.tamanioLetra(50)));
-		
+
 		panelEncabezado = new JPanel();
-		panelEncabezado.setLayout(new GridLayout(3,1));
+		panelEncabezado.setLayout(new GridLayout(3, 1));
 		panelEncabezado.setOpaque(false);
-		panelEncabezado.setBounds(0,0,dimPan.PenX(50), dimPan.PenY(10));
+		panelEncabezado.setBounds(0, 0, dimPan.PenX(50), dimPan.PenY(10));
 		panelEncabezado.add(new JLabel(" "));
 		panelEncabezado.add(labelTituloItem);
-		
+
 	}
-	
-	protected JPanel panelLista(String titulo, ResultSet rs) throws SQLException{//Solo para la lista de los expositores
-		
-		DefaultTableModel tablaModel = new DefaultTableModel();
+
+	protected JPanel panelLista(String titulo) throws SQLException {// Solo para
+																	// la lista
 		tablaModel.addColumn("ID");
 		tablaModel.addColumn("NOMBRE");
 		tablaModel.addColumn("AP. PATERNO");
@@ -56,30 +59,28 @@ public class PanelListas {
 		tablaModel.addColumn("DIRECCION");
 		tablaModel.addColumn("E-MAIL");
 		tablaModel.addColumn("TELEFONO");
-		
-		tabla = new JTable();
+
 		tabla.setModel(tablaModel);
-		
-		filas = new String[8];
-		int indice = 1;
-		while(rs.next()){ // Mejorar ojo
-			filas [0] = (rs.getString(1));
-			filas [1] = (rs.getString(2));
-			filas [2] = (rs.getString(3));
-			filas [3] = (rs.getString(4));
-			filas [4] = (rs.getString(5));
-			filas [5] = (rs.getString(6));
-			filas [6] = (rs.getString(7));
-			filas [7] = (rs.getString(8));
+
+		//int indice = 1;
+		while (rs.next()) { // Mejorar ojo
+			filas[0] = (rs.getString(1));
+			filas[1] = (rs.getString(2));
+			filas[2] = (rs.getString(3));
+			filas[3] = (rs.getString(4));
+			filas[4] = (rs.getString(5));
+			filas[5] = (rs.getString(6));
+			filas[6] = (rs.getString(7));
+			filas[7] = (rs.getString(8));
 			tablaModel.addRow(filas);
 		}
 		tabla.setEnabled(false);
 		scroll.setViewportView(tabla);
-		
+
 		JPanel panel = new JPanel();
 		panel.setLayout(new BorderLayout());
 		panel.setOpaque(false);
-		
+
 		panel.add(scroll, BorderLayout.CENTER);
 		panel.add(new JLabel("      "), BorderLayout.SOUTH);
 		panel.add(new JLabel("      "), BorderLayout.WEST);
@@ -88,7 +89,42 @@ public class PanelListas {
 		
 		panel.add(panelEncabezado, BorderLayout.NORTH);
 		labelTituloItem.setText(titulo);
-		
 		return panel;
 	}
+
+	public void actualizaTabla(ResultSet rs) {
+		//tablaModel = new DefaultTableModel();
+		
+		
+			System.out.println(tablaModel.getRowCount());	
+			while(tablaModel.getRowCount()>0){
+				tablaModel.removeRow(0);
+			}
+			
+		try {
+			while (rs.next()) { // Mejorar ojo
+				filas[0] = (rs.getString(1));
+				filas[1] = (rs.getString(2));
+				filas[2] = (rs.getString(3));
+				filas[3] = (rs.getString(4));
+				filas[4] = (rs.getString(5));
+				filas[5] = (rs.getString(6));
+				filas[6] = (rs.getString(7));
+				filas[7] = (rs.getString(8));
+				tablaModel.addRow(filas);
+			}
+			System.out.println("Filas actuales: "+tablaModel.getRowCount());
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+	}
+	
+	protected int numeroDeFilas(){
+		int numeroFilas;
+		numeroFilas = tablaModel.getRowCount();
+		System.out.println("Cantidad en tabla: " + tablaModel.getRowCount());
+		return numeroFilas;
+		
+	}
+	
 }

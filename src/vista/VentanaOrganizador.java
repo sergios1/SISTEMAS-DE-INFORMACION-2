@@ -17,16 +17,18 @@ import modelo.ConeccionBDPostgres;
 * @author Gustavo
 * 
 */
-public final class VentanaOrganizador extends VentanaUsuario implements ActionListener {
+public final class VentanaOrganizador extends VentanaUsuario implements ActionListener, Runnable{
 	private JButton btnRegistrar, btnCerrarSesion, btnVerExpositores;
 	private PanelListas listas;
 	private LabelImagen img;
-	private ConeccionBDPostgres conexion;
+	private ConeccionBDPostgres con;
+	private byte segundos;
+	private Thread hilo1;
 	public VentanaOrganizador(String nombreVentana, String titulo, String archivoIcono){
 		
 		super(nombreVentana, titulo, archivoIcono);
 		
-		conexion = new ConeccionBDPostgres();
+		con = new ConeccionBDPostgres();
 		
 		panel12.setLayout(new GridLayout(3, 6, 10,10));
 		panel12.add(new JLabel(" "));
@@ -52,7 +54,6 @@ public final class VentanaOrganizador extends VentanaUsuario implements ActionLi
 		btnVerExpositores.addActionListener(this);
 		panel12.add(btnVerExpositores);
 		
-		
 		panel12.add(new JLabel(" "));
 		panel12.add(new JLabel(" "));
 		
@@ -61,7 +62,7 @@ public final class VentanaOrganizador extends VentanaUsuario implements ActionLi
 		panel12.add(new JLabel(" "));
 		panel12.add(new JLabel(" "));
 		panel12.add(new JLabel(" "));
-		panel12.add(new JLabel(" "));
+		//panel12.add(new JLabel(" "));
 		
 		img = new LabelImagen(50, 50);
 		panel21.add(img.labelImagen("fotoConferencia.png"));
@@ -76,20 +77,26 @@ public final class VentanaOrganizador extends VentanaUsuario implements ActionLi
 		panel22.setVisible(false);
 		
 		mostrarListaExpositores();
+		
+		hilo1 = new Thread(this);
+        hilo1.start();
 	}
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 				if(e.getSource()==itemSalir){
 					System.exit(0);
+					hilo1.stop();
 				}else if(e.getSource()==itemCerrarSesion){
 					cerrarSesion();
+					
 				}else if(e.getSource()==btnRegistrar){
 					new VentanaRegistroExpositores(this, true).setVisible(true);
 				}else if(e.getSource()==itemAcerca){
 					mostrarAutores();
 				}else if(e.getSource()==btnCerrarSesion){
 					cerrarSesion();
+					
 				}else if(e.getSource() == btnVerExpositores){
 					panel22.setVisible(true);
 				}
@@ -97,19 +104,19 @@ public final class VentanaOrganizador extends VentanaUsuario implements ActionLi
 	
 	protected void mostrarListaExpositores(){
 		
-		listas = new PanelListas();
+		listas = new PanelListas(con.mostrarDatos("conferencista",
+				new String[] {"idconfe","nomconfe", "apellidopatconfe", "apellidomatconfe", "especialidadconf", "dirconfe",
+						"email", "telfconfe"}));
 		try {
-			panel22.add(listas.panelLista("LISTA DE EXPOSITORES", conexion.mostrarDatos("conferencista",
-					new String[] {"idconfe","nomconfe", "apellidopatconfe", "apellidomatconfe", "especialidadconf", "dirconfe",
-							"email", "telfconfe"})));
-			System.out.println("Se pulso el boton");
+			panel22.add(listas.panelLista("LISTA DE EXPOSITORES"));
+			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
 	}
-	public void cerrarSesion(){
+	protected void cerrarSesion(){
 		ImageIcon icon = new ImageIcon("src/archivosmultimedia/exit.png");
         int input = JOptionPane.showConfirmDialog(this, 
                 "Seguro de cerrar el programa?", "Confirmación", 
@@ -118,6 +125,31 @@ public final class VentanaOrganizador extends VentanaUsuario implements ActionLi
 			VentanaPrincipal inicio = new VentanaPrincipal();
 			inicio.setVisible(true);
 			this.dispose();
+			hilo1.stop();
+		}
+	}
+
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+		while(segundos <= 5){
+			 try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			 if(segundos==5){
+				 if(con.cantidaFilas("conferencista") != listas.numeroDeFilas()){
+					 listas.actualizaTabla(con.mostrarDatos("conferencista",
+								new String[] {"idconfe","nomconfe", "apellidopatconfe", 
+										"apellidomatconfe", "especialidadconf", "dirconfe",
+										"email", "telfconfe"}));
+				 }
+				 
+				 segundos = 0;
+			 }
+			segundos ++;
 		}
 	}
 }

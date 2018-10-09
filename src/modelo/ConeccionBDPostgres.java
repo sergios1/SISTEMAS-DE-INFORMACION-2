@@ -2,6 +2,8 @@ package modelo;
 
 import java.sql.*;
 
+import javax.swing.JOptionPane;
+
 public class ConeccionBDPostgres {
 	private Connection con;
 	private Statement st;
@@ -31,15 +33,14 @@ public class ConeccionBDPostgres {
 
 	public ResultSet mostrarDatos(String nombreTabla, String [] elementos) {
 		String datos = "";
+		rs = null;
 		for(int i = 0; i < elementos.length; i++){
 			if(i< elementos.length -1){
 				datos += elementos [i]+", ";
 			}else{
 				datos += elementos [i];
 			}
-			
 		}
-		System.out.println(datos);
 		try {
 			st = con.createStatement();
 			rs = st.executeQuery("select "+datos+" from " + nombreTabla);
@@ -59,8 +60,36 @@ public class ConeccionBDPostgres {
 		}catch(Exception e){
 			System.out.println("No se optenieron los datos de login de la BD");
 			return rs;
-			
+		}
+	}
+	
+	public boolean guargarDatosExpositor(String [] datos){//String nombre, String apPat, String apMat, String direccion, String telefono, String especial, String idadmin, String email){//egistro conferencista
+		String query =  "insert into conferencista(nomconfe, apellidopatconfe, apellidomatconfe, dirconfe, "
+				+ "telfconfe, especialidadconf, idadmin, email) values "
+				+  "('"+datos [0]+"', '"+datos[1]+"', '"+datos[2]+"', '"+datos[3]+"', "+datos[4]+", '"+datos[5]+
+				"', "+datos[6]+", '"+datos[7]+"');";
+				//+ "("+nombre+", "+apPat+", "+apMat+", "+direccion+", "+telefono+", "+especial+", "+idadmin+", "+email+");";
+		try {
+			st=con.createStatement();
+			st.executeUpdate(query);
+			return true;
+		} catch (Exception e) {
+			// TODO: handle exception
+			return false;
 		}
 		
+	}
+	public int cantidaFilas(String tabla){
+		int cantidad = 0;
+		try{
+			st = con.createStatement();
+			rs = st.executeQuery("select count(*) as numero from "+tabla);
+			while(rs.next()){
+				cantidad = Integer.parseInt(rs.getString("numero"));
+			}
+		}catch(Exception e){
+		}
+		System.out.println("Cantidad en BD: "+cantidad);
+		return cantidad;
 	}
 }

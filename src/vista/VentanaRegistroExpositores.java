@@ -3,6 +3,9 @@ package vista;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+
+import controlador.ValidacionDatos;
+import modelo.ConeccionBDPostgres;
 /**
 *
 * @author Gustavo
@@ -12,9 +15,10 @@ public class VentanaRegistroExpositores extends JDialog implements ActionListene
 	
 	private JPanel panelFondo;
 	private JLabel labelTitulo, labelNombreExpositor, labelAP, labelAM, 
-	labelDireccion, labelEmail, labelTelefono; 
+	labelDireccion, labelEmail, labelTelefono, labelEspecialidad; 
 	private JTextField fieldNombreExpositor, fieldAP, fieldAM, 
 	fieldDireccion, fieldEmail, fieldTelefono;
+	private JComboBox comboEspecialidad;
 	private JButton botonCancelar,botonRegistrar;
 	private Herramientas dimPan;
 	public VentanaRegistroExpositores(Frame padre, boolean bloquear){
@@ -36,6 +40,8 @@ public class VentanaRegistroExpositores extends JDialog implements ActionListene
 		labelEmail = new JLabel ("E-MAIL:   ");
 		labelTelefono = new JLabel ("TELEFONO:   ");
 		labelDireccion = new JLabel("DIRECCION:   ");
+		labelEspecialidad = new JLabel("ESPECIALIDAD:   ");
+		comboEspecialidad = new JComboBox();
 		
 		fieldNombreExpositor = new JTextField();
 		fieldAP = new JTextField();
@@ -48,7 +54,7 @@ public class VentanaRegistroExpositores extends JDialog implements ActionListene
 		botonRegistrar = new JButton("REGISTRAR");
 		
 		labelTitulo.setBounds(0, dimPan.PenY(1), dimPan.PenX(50), dimPan.PenY(6));
-		labelTitulo.setFont(new Font("Andale mono", 1, dimPan.tamanioLetra(25)));
+		labelTitulo.setFont(new Font("Andale mono", 1, dimPan.tamanioLetra(45)));
 		labelTitulo.setHorizontalAlignment(SwingConstants.CENTER);
 		panelFondo.add(labelTitulo);
 		
@@ -76,6 +82,10 @@ public class VentanaRegistroExpositores extends JDialog implements ActionListene
 		labelTelefono.setHorizontalAlignment(SwingConstants.RIGHT);
 		panelFondo.add(labelTelefono);
 		
+		labelEspecialidad.setBounds(0, dimPan.PenY(40), dimPan.PenX(25), dimPan.PenY(5));
+		labelEspecialidad.setHorizontalAlignment(SwingConstants.RIGHT);
+		panelFondo.add(labelEspecialidad);
+		
 		fieldNombreExpositor.setBounds(dimPan.PenX(25), dimPan.PenY(10), dimPan.PenX(10), dimPan.PenY(4.5F));
 		panelFondo.add(fieldNombreExpositor);
 		
@@ -94,6 +104,9 @@ public class VentanaRegistroExpositores extends JDialog implements ActionListene
 		fieldTelefono.setBounds(dimPan.PenX(25), dimPan.PenY(35), dimPan.PenX(10), dimPan.PenY(4.5F));
 		panelFondo.add(fieldTelefono);
 		
+		comboEspecialidad.setBounds(dimPan.PenX(25), dimPan.PenY(40), dimPan.PenX(10), dimPan.PenY(4.5F));
+		panelFondo.add(comboEspecialidad);
+		
 		
 		botonCancelar = new JButton("CANCELAR");
 		botonCancelar.setBounds(dimPan.PenX(10), dimPan.PenY(50), dimPan.PenX(10), dimPan.PenY(4.5F));
@@ -105,6 +118,16 @@ public class VentanaRegistroExpositores extends JDialog implements ActionListene
 		botonRegistrar.addActionListener(this);
 		panelFondo.add(botonRegistrar);
 		
+		comboEspecialidad.addItem(" ");
+		comboEspecialidad.addItem("REDES");
+		comboEspecialidad.addItem("DESARROLLO");
+		comboEspecialidad.addItem("INTELIGENCIA ARTIFICIAL");
+		comboEspecialidad.addItem("SERVIDORES LINUX");
+		comboEspecialidad.addItem("BASE DE DATOS");
+		comboEspecialidad.addItem("WEB");
+		comboEspecialidad.addItem("HACKING");
+		
+		panelFondo.setBackground(new Color(155, 191, 42));
 	}
 	
 	@Override
@@ -113,8 +136,26 @@ public class VentanaRegistroExpositores extends JDialog implements ActionListene
 		if(e.getSource()==botonCancelar){
 			this.dispose();
 		}else {
+			ValidacionDatos validar = new ValidacionDatos();
 			
+			String nombre = validar.eliminarEspacio(fieldNombreExpositor.getText()).toUpperCase();
+			String aP = validar.eliminarEspacio(fieldAP.getText()).toUpperCase();
+			String aM = validar.eliminarEspacio(fieldAM.getText()).toUpperCase();
+			String dir = validar.eliminarEspacio(fieldDireccion.getText()).toUpperCase();
+			String telf = validar.eliminarEspacio(fieldTelefono.getText());
+			String email = validar.eliminarEspacio(fieldEmail.getText());
+			String especialidad = comboEspecialidad.getSelectedItem().toString();
+			String idAdmin = "1";
 			
+			if(validar.autorizarGuardado(nombre, aP, aM, dir, telf, email, especialidad)){
+				ConeccionBDPostgres con = new ConeccionBDPostgres();
+				con.guargarDatosExpositor(new String []{nombre, aP, aM, dir, telf, especialidad, idAdmin, email});
+				JOptionPane.showMessageDialog(this, "Se guardó con éxito!");
+				this.dispose();
+				
+			}else{
+				JOptionPane.showMessageDialog(this, "Revisa los campos");
+			}
 			
 		}
 	}
