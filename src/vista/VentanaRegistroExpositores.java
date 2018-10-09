@@ -13,7 +13,7 @@ import modelo.ConeccionBDPostgres;
 */
 public class VentanaRegistroExpositores extends JDialog implements ActionListener{
 	
-	private JPanel panelFondo;
+	private JPanel panelFondo, panelEncabezado;
 	private JLabel labelTitulo, labelNombreExpositor, labelAP, labelAM, 
 	labelDireccion, labelEmail, labelTelefono, labelEspecialidad; 
 	private JTextField fieldNombreExpositor, fieldAP, fieldAM, 
@@ -32,6 +32,10 @@ public class VentanaRegistroExpositores extends JDialog implements ActionListene
 		panelFondo.setBounds(0,0,dimPan.PenX(50), dimPan.PenY(70));
 		panelFondo.setLayout(null);
 		this.add(panelFondo);
+		
+		panelEncabezado = new JPanel();
+		panelEncabezado.setBounds(0, 0, dimPan.PenX(50), dimPan.PenY(7));
+		panelFondo.add(panelEncabezado);
 		//INICIALIZACION DE LOS OBJETOS
 		labelTitulo = new JLabel("REGISTRO DE EXPOSITORES");
 		labelNombreExpositor = new JLabel("NOMBRE:   ");
@@ -56,7 +60,7 @@ public class VentanaRegistroExpositores extends JDialog implements ActionListene
 		labelTitulo.setBounds(0, dimPan.PenY(1), dimPan.PenX(50), dimPan.PenY(6));
 		labelTitulo.setFont(new Font("Andale mono", 1, dimPan.tamanioLetra(45)));
 		labelTitulo.setHorizontalAlignment(SwingConstants.CENTER);
-		panelFondo.add(labelTitulo);
+		panelEncabezado.add(labelTitulo);
 		
 		labelNombreExpositor.setBounds(0, dimPan.PenY(10), dimPan.PenX(25), dimPan.PenY(5));
 		labelNombreExpositor.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -144,12 +148,12 @@ public class VentanaRegistroExpositores extends JDialog implements ActionListene
 			String dir = validar.eliminarEspacio(fieldDireccion.getText()).toUpperCase();
 			String telf = validar.eliminarEspacio(fieldTelefono.getText());
 			String email = validar.eliminarEspacio(fieldEmail.getText());
-			String especialidad = comboEspecialidad.getSelectedItem().toString();
+			String especialidad = comboEspecialidad.getSelectedItem().toString().toUpperCase();
 			String idAdmin = "1";
 			
-			if(validar.autorizarGuardado(nombre, aP, aM, dir, telf, email, especialidad)){
+			if(validar.autorizarGuardado(nombre, aP, aM, telf, email, especialidad)){
 				ConeccionBDPostgres con = new ConeccionBDPostgres();
-				con.guargarDatosExpositor(new String []{nombre, aP, aM, dir, telf, especialidad, idAdmin, email});
+				con.guargarDatosExpositor(new String []{nombre, aP, aM, telf, especialidad, idAdmin, email});
 				JOptionPane.showMessageDialog(this, "Se guardó con éxito!");
 				this.dispose();
 				

@@ -33,6 +33,7 @@ public class VentanaUsuario extends JFrame{
 		imagen = herraminetas.getImage(dimPan.navegarPorProyecto(archivoIcono));
 		setIconImage(imagen);
 		
+		//this.setDefaultCloseOperation(0);
 		this.setTitle(nombreVentana);
 		this.setBounds(0,0,dimPan.PenX(99), dimPan.PenY(90));
 		this.setExtendedState(6);// 6 es para expandir la pantalla 
@@ -144,5 +145,29 @@ public class VentanaUsuario extends JFrame{
 		ImageIcon icon = new ImageIcon("src/archivosmultimedia/creditos.png");
 		JOptionPane.showMessageDialog(this, texto.toUpperCase(), "Créditos", JOptionPane.PLAIN_MESSAGE, icon);
 	}
+	protected boolean cerrarSesion(Frame ventana){
+		ImageIcon icon = new ImageIcon("src/archivosmultimedia/exit.png");
+        int input = JOptionPane.showConfirmDialog(ventana, 
+                "Seguro de cerrar sesion?", "Confirmación", 
+                JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, icon);
+		if(input == 0){
+			return true;
+		}else {
+			return false;
+		}
+	}
 	
+	protected boolean cerrarPrograma(Frame ventana){
+		ImageIcon icon = new ImageIcon("src/archivosmultimedia/exit.jpg");
+        int input = JOptionPane.showConfirmDialog(ventana, 
+                "Seguro de querer cerrar el programa?", "Confirmación", 
+                JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, icon);
+        	
+		if(input == 0){
+			return true;
+		}else {
+			return false;
+			
+		}
+	}
 }

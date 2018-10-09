@@ -180,41 +180,75 @@ public class ValidacionDatos {
 		return ocultar;
 	}
 
-	public boolean validarTelefono(String telefono){//Falta controlar celulares cantidad de digitos
-		
+	public boolean validarTelefono(String telefono) {// Falta controlar
+														// celulares cantidad de
+														// digitos
+
 		boolean autorizar;
 		autorizar = true;
 		System.out.println(telefono);
-		if((telefono.length() != 7 && telefono.length() != 8) || (telefono.charAt(0)!='4'&& telefono.charAt(0)!='2' &&
-				telefono.charAt(0)!='3' && telefono.charAt(0)!='7'&& telefono.charAt(0)!='6')) {
+		if ((telefono.length() != 7 && telefono.length() != 8)
+				|| (telefono.charAt(0) != '4' && telefono.charAt(0) != '2' && telefono.charAt(0) != '3'
+						&& telefono.charAt(0) != '7' && telefono.charAt(0) != '6')) {
 			autorizar = false;
 			System.out.println("Ingreso al if");
 		}
-			int indice = 0;
-			while(autorizar && indice < telefono.length()){
-				if(telefono.charAt(indice) != '0' && telefono.charAt(indice) != '1'&&
-						telefono.charAt(indice) != '2' && telefono.charAt(indice) != '3'
-						&& telefono.charAt(indice) != '4' && telefono.charAt(indice) != '5'
-						&& telefono.charAt(indice) != '6' && telefono.charAt(indice) != '7'
-						&& telefono.charAt(indice) != '8' && telefono.charAt(indice) != '9'){
-					autorizar = false;
-					break;
-				}
-				indice ++;
+		int indice = 0;
+		while (autorizar && indice < telefono.length()) {
+			if (telefono.charAt(indice) != '0' && telefono.charAt(indice) != '1' && telefono.charAt(indice) != '2'
+					&& telefono.charAt(indice) != '3' && telefono.charAt(indice) != '4'
+					&& telefono.charAt(indice) != '5' && telefono.charAt(indice) != '6'
+					&& telefono.charAt(indice) != '7' && telefono.charAt(indice) != '8'
+					&& telefono.charAt(indice) != '9') {
+				autorizar = false;
+				break;
 			}
-		
+			indice++;
+		}
+
 		return autorizar;
 	}
 
-	public boolean autorizarGuardado(String nombre, String apP, String apM, String direccion, String telf,
-			String email, String especialidad) {
+	public boolean validarCI(String cI) {
+		boolean autorizar = true;
+		if (cI.length() != 7) {
+			autorizar = false;
+		} else {
+			for (int i = 0; i < cI.length(); i++) {
+				if (cI.charAt(i) != '1' && cI.charAt(i) != '2' && cI.charAt(i) != '3' && cI.charAt(i) != '4'
+						&& cI.charAt(i) != '5' && cI.charAt(i) != '6' && cI.charAt(i) != '7' && cI.charAt(i) != '8'
+						&& cI.charAt(i) != '9' && cI.charAt(i) != '0') {
+					autorizar = false;
+					break;
+				}
+			}
+		}
+		return autorizar;
 
-		if (validarAlfabeto(nombre) && validarAlfabeto(apP) && validarAlfabeto(apM) && validarAlfabeto(direccion)
-				&& validarTelefono(telf) && validarCorreo(email) && !especialidad.equals(" ")) {
-			
+	}
+
+	public boolean autorizarGuardado(String nombre, String apP, String apM, String telf, String email,
+			String especialidad) {
+
+		if (validarAlfabeto(nombre) && validarAlfabeto(apP) && validarAlfabeto(apM) && validarTelefono(telf)
+				&& validarCorreo(email) && !especialidad.equals(" ")) {
+
 			return true;
 
-		}else{
+		} else {
+			return false;
+		}
+	}
+	
+	public boolean autorizarGuardado(String nombre, String apP, String apM, String cI, String telf, String email,
+			String especialidad) {// SobreCArca con CI
+
+		if (validarAlfabeto(nombre) && validarAlfabeto(apP) && validarAlfabeto(apM) && validarTelefono(telf)
+				&& validarCorreo(email) && !especialidad.equals(" ") && validarCI(cI)) {
+
+			return true;
+
+		} else {
 			return false;
 		}
 	}

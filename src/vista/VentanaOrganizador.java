@@ -18,12 +18,14 @@ import modelo.ConeccionBDPostgres;
 * 
 */
 public final class VentanaOrganizador extends VentanaUsuario implements ActionListener, Runnable{
+	
 	private JButton btnRegistrar, btnCerrarSesion, btnVerExpositores;
 	private PanelListas listas;
 	private LabelImagen img;
 	private ConeccionBDPostgres con;
 	private byte segundos;
 	private Thread hilo1;
+	
 	public VentanaOrganizador(String nombreVentana, String titulo, String archivoIcono){
 		
 		super(nombreVentana, titulo, archivoIcono);
@@ -85,17 +87,28 @@ public final class VentanaOrganizador extends VentanaUsuario implements ActionLi
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 				if(e.getSource()==itemSalir){
-					System.exit(0);
-					hilo1.stop();
+					if (cerrarPrograma(this)){
+						hilo1.stop();
+						System.exit(0);
+					}
+					
 				}else if(e.getSource()==itemCerrarSesion){
-					cerrarSesion();
+					if(cerrarSesion(this)){
+						VentanaPrincipal inicio = new VentanaPrincipal();
+						inicio.setVisible(true);
+						this.dispose();
+					}
 					
 				}else if(e.getSource()==btnRegistrar){
 					new VentanaRegistroExpositores(this, true).setVisible(true);
 				}else if(e.getSource()==itemAcerca){
 					mostrarAutores();
 				}else if(e.getSource()==btnCerrarSesion){
-					cerrarSesion();
+					if(cerrarSesion(this)){
+						VentanaPrincipal inicio = new VentanaPrincipal();
+						inicio.setVisible(true);
+						this.dispose();
+					}
 					
 				}else if(e.getSource() == btnVerExpositores){
 					panel22.setVisible(true);
@@ -115,18 +128,6 @@ public final class VentanaOrganizador extends VentanaUsuario implements ActionLi
 			e.printStackTrace();
 		}
 		
-	}
-	protected void cerrarSesion(){
-		ImageIcon icon = new ImageIcon("src/archivosmultimedia/exit.png");
-        int input = JOptionPane.showConfirmDialog(this, 
-                "Seguro de cerrar el programa?", "Confirmación", 
-                JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, icon);
-		if(input == 0){
-			VentanaPrincipal inicio = new VentanaPrincipal();
-			inicio.setVisible(true);
-			this.dispose();
-			hilo1.stop();
-		}
 	}
 
 	@Override

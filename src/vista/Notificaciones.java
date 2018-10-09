@@ -1,5 +1,8 @@
 package vista;
 
-public class Notificaciones {
+import javax.swing.ImageIcon;
+import javax.swing.*;
+
+public class Notificaciones extends JFrame{
 
 }

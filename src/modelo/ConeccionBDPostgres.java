@@ -92,4 +92,21 @@ public class ConeccionBDPostgres {
 		System.out.println("Cantidad en BD: "+cantidad);
 		return cantidad;
 	}
+	public boolean guardarEstudiante(String [] datos){
+		String query =  "insert into estudiante(nombreestud, apellidopatestud, apellidomatestud, ciestud, "
+				+ "curso, telefestud, email, idsecre) values "
+				+  "('"+datos [0]+"', '"+datos[1]+"', '"+datos[2]+"', '"+datos[3]+"', '"+datos[4]+"', '"+datos[5]+
+				"', '"+datos[6]+"', "+datos[7]+");";
+				//+ "("+nombre+", "+apPat+", "+apMat+", "+direccion+", "+telefono+", "+especial+", "+idadmin+", "+email+");";
+		try {
+			st=con.createStatement();
+			st.executeUpdate(query);
+			return true;
+		} catch (Exception e) {
+			// TODO: handle exception
+			System.out.println(e);
+			return false;
+		}
+		
+	}
 }

@@ -1,13 +1,17 @@
 package vista;
 
 import javax.swing.*;
+
+import controlador.ValidacionDatos;
+import modelo.ConeccionBDPostgres;
+
 import java.awt.*;
 import java.awt.event.*;
 
 public class VentanaInscribirEstudiante extends JDialog implements ActionListener {
 
 	private JLabel labelTitulo, labelAnuncio;
-	private JTextField fieldNombre, fieldApP, fieldApM, fieldCel, fieldEmail;
+	private JTextField fieldNombre, fieldApP, fieldApM, fieldCI, fieldCel, fieldEmail;
 	private JButton botonInscribir;
 	private JButton botonCancelar;
 	private JComboBox<String> comboCurso;
@@ -20,7 +24,7 @@ public class VentanaInscribirEstudiante extends JDialog implements ActionListene
 		this.setResizable(false);
 
 		dimPan = new DimensionesPantalla();
-		this.setSize(dimPan.PenX(40), dimPan.PenY(70));
+		this.setSize(dimPan.PenX(40), dimPan.PenY(75));
 		this.setLocationRelativeTo(null);
 		this.getContentPane().setBackground(new Color(155, 191, 42));
 		
@@ -45,14 +49,15 @@ public class VentanaInscribirEstudiante extends JDialog implements ActionListene
 		escribir("Nombre:  ", dimPan.PenY(3.5F));
 		escribir("Apellido Paterno:  ", dimPan.PenY(4.5F));
 		escribir("Apellido Materno:  ", dimPan.PenY(5.5F));
-		escribir("Telf. Ref.:  ", dimPan.PenY(6.5F));
-		escribir("E-MAIL:  ", dimPan.PenY(7.5F));
-		escribir("Curso:  ", dimPan.PenY(8.5F));
+		escribir("CI:  ", dimPan.PenY(6.5F));
+		escribir("Telf. Ref.:  ", dimPan.PenY(7.5F));
+		escribir("E-MAIL:  ", dimPan.PenY(8.5F));
+		escribir("Curso:  ", dimPan.PenY(9.5F));
 		
 		dibujarFields();
 		
 		comboCurso = new JComboBox<String>();
-		comboCurso.setBounds(dimPan.PenX(20), dimPan.PenY(46.5F), dimPan.PenX(12), dimPan.PenY(4));
+		comboCurso.setBounds(dimPan.PenX(20), dimPan.PenY(52.9F), dimPan.PenX(12), dimPan.PenY(4));
 		comboCurso.addItem(" ");
 		comboCurso.addItem("Curso 1");
 		comboCurso.addItem("Curso 2");
@@ -68,12 +73,14 @@ public class VentanaInscribirEstudiante extends JDialog implements ActionListene
 		fieldApM = new JTextField();
 		fieldCel = new JTextField();
 		fieldEmail = new JTextField();
+		fieldCI = new JTextField();
 		
 		fieldNombre.setBounds(dimPan.PenX(20), dimPan.PenY(15), dimPan.PenX(12), dimPan.PenY(4));
 		fieldApP.setBounds(dimPan.PenX(20), dimPan.PenY(21.4F), dimPan.PenX(12), dimPan.PenY(4));
 		fieldApM.setBounds(dimPan.PenX(20), dimPan.PenY(27.7F), dimPan.PenX(12), dimPan.PenY(4));
-		fieldCel.setBounds(dimPan.PenX(20), dimPan.PenY(33.2F), dimPan.PenX(12), dimPan.PenY(4));
-		fieldEmail.setBounds(dimPan.PenX(20), dimPan.PenY(39.7F), dimPan.PenX(12), dimPan.PenY(4));
+		fieldCI.setBounds(dimPan.PenX(20), dimPan.PenY(33.2F), dimPan.PenX(12), dimPan.PenY(4));
+		fieldCel.setBounds(dimPan.PenX(20), dimPan.PenY(39.7F), dimPan.PenX(12), dimPan.PenY(4));
+		fieldEmail.setBounds(dimPan.PenX(20), dimPan.PenY(46.1F), dimPan.PenX(12), dimPan.PenY(4));
 		
 		Font font1 = new Font("Andale Mono", 0, dimPan.tamanioLetra(16));
 		fieldNombre.setFont(font1);
@@ -81,10 +88,12 @@ public class VentanaInscribirEstudiante extends JDialog implements ActionListene
 		fieldApM.setFont(font1);
 		fieldCel.setFont(font1);
 		fieldEmail.setFont(font1);
+		fieldCI.setFont(font1);
 		
 		this.add(fieldNombre);
 		this.add(fieldApP);
 		this.add(fieldApM);
+		this.add(fieldCI);
 		this.add(fieldCel);
 		this.add(fieldEmail);
 		
@@ -94,8 +103,8 @@ public class VentanaInscribirEstudiante extends JDialog implements ActionListene
 		botonCancelar = new JButton("Cancelar");
 		botonInscribir = new JButton("Inscribir");
 		
-		botonCancelar.setBounds(dimPan.PenX(10), dimPan.PenY(55), dimPan.PenX(7), dimPan.PenY(4));
-		botonInscribir.setBounds(dimPan.PenX(25), dimPan.PenY(55), dimPan.PenX(7), dimPan.PenY(4));
+		botonCancelar.setBounds(dimPan.PenX(10), dimPan.PenY(60), dimPan.PenX(7), dimPan.PenY(4));
+		botonInscribir.setBounds(dimPan.PenX(25), dimPan.PenY(60), dimPan.PenX(7), dimPan.PenY(4));
 		
 		botonCancelar.setBackground(Color.DARK_GRAY);
 		botonInscribir.setBackground(Color.DARK_GRAY);
@@ -132,23 +141,29 @@ public class VentanaInscribirEstudiante extends JDialog implements ActionListene
 				fieldApM.getText().trim().equals("") || fieldCel.getText().trim().equals("") ||
 				fieldEmail.getText().trim().equals("")){
 				JOptionPane.showMessageDialog(null, "Todos los campos son obligatorios");
-			}else{//Accion del boton inscribir
-//				System.out.println("Nombre: "+fieldNombre.getText()+"\n"+
-//						"Ap Paterno: "+fieldApP.getText()+"\n"+
-//						"Ap MAterno: "+fieldApM.getText()+"\n"+
-//						"Celular: "+fieldCel.getText()+"\n"+
-//						"E-mail: "+fieldEmail.getText()+"\n"+
-//						"Curso: "+(String)comboCurso.getSelectedItem());
-//				System.out.println("Esperando evento");
-				//Limpiar
-				fieldNombre.setText("");
-				fieldApP.setText("");
-				fieldApM.setText("");
-				fieldCel.setText("");
-				fieldEmail.setText("");
-				comboCurso.setSelectedIndex(0);
+			}else{
+				ValidacionDatos validar = new ValidacionDatos();
+				
+				String nombre = validar.eliminarEspacio(fieldNombre.getText()).toUpperCase();
+				String aP = validar.eliminarEspacio(fieldApP.getText()).toUpperCase();
+				String aM = validar.eliminarEspacio(fieldApM.getText()).toUpperCase();
+				String cI = validar.eliminarEspacio(fieldCI.getText());
+				String telf = validar.eliminarEspacio(fieldCel.getText());
+				String email = validar.eliminarEspacio(fieldEmail.getText());
+				String curso = comboCurso.getSelectedItem().toString().toUpperCase();
+				String idSec = "2";
+				if(validar.autorizarGuardado(nombre, aP, aM, cI,telf, email, curso)){
+					ConeccionBDPostgres cn = new ConeccionBDPostgres();
+					if(cn.guardarEstudiante(new String [] {nombre, aP, aM, cI, curso, telf, email, idSec})){
+						JOptionPane.showMessageDialog(this, "Se registró correctamente", "Informe", JOptionPane.INFORMATION_MESSAGE);
+						this.dispose();
+					}else{
+						JOptionPane.showMessageDialog(this, "No se pudo procesar", "Informe", JOptionPane.ERROR_MESSAGE);
+					}
+				}else{
+					JOptionPane.showMessageDialog(this, "Revisa los campos", "Datos inválidos", JOptionPane.NO_OPTION);
+				}
 			}
-			
 		}
 	}
 }

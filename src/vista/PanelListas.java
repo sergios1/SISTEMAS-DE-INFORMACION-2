@@ -26,12 +26,7 @@ public class PanelListas {
 		tablaModel = new DefaultTableModel();
 		tabla = new JTable();
 		filas = new String[8];
-		/*
-		 * Object[][] datos=new Object();//Leer de la base de datos String[]
-		 * nombrecolumnas={"ID","NOMBRE","APELLIDO PATERNO","APELLIDO MATERNO"
-		 * ,"DIRECCION","E-MAIL","TELEFONO"}; tablaExpositores = new
-		 * JTable(datos, nombrecolumnas);
-		 */
+		
 		scroll = new JScrollPane();
 
 		labelTituloItem = new JLabel();
@@ -62,7 +57,6 @@ public class PanelListas {
 
 		tabla.setModel(tablaModel);
 
-		//int indice = 1;
 		while (rs.next()) { // Mejorar ojo
 			filas[0] = (rs.getString(1));
 			filas[1] = (rs.getString(2));
@@ -91,11 +85,52 @@ public class PanelListas {
 		labelTituloItem.setText(titulo);
 		return panel;
 	}
+	
+	public JPanel listaEstudiantes(String titulo) throws SQLException{
+		
+		tablaModel.addColumn("ID");
+		tablaModel.addColumn("NOMBRE");
+		tablaModel.addColumn("AP. PATERNO");
+		tablaModel.addColumn("AP. MATERNO");
+		tablaModel.addColumn("CI");
+		tablaModel.addColumn("TELEFONO");
+		tablaModel.addColumn("E-MAIL");
+		tablaModel.addColumn("CURSO");
+
+		tabla.setModel(tablaModel);
+
+		while (rs.next()) { // Mejorar ojo
+			filas[0] = (rs.getString(1));
+			filas[1] = (rs.getString(2));
+			filas[2] = (rs.getString(3));
+			filas[3] = (rs.getString(4));
+			filas[4] = (rs.getString(5));
+			filas[5] = (rs.getString(6));
+			filas[6] = (rs.getString(7));
+			filas[7] = (rs.getString(8));
+			tablaModel.addRow(filas);
+		}
+		tabla.setEnabled(false);
+		scroll.setViewportView(tabla);
+
+		JPanel panel = new JPanel();
+		panel.setLayout(new BorderLayout());
+		panel.setOpaque(false);
+
+		panel.add(scroll, BorderLayout.CENTER);
+		panel.add(new JLabel("      "), BorderLayout.SOUTH);
+		panel.add(new JLabel("      "), BorderLayout.WEST);
+		panel.add(new JLabel("      "), BorderLayout.EAST);
+		panel.add(new JLabel("      "), BorderLayout.NORTH);
+		
+		panel.add(panelEncabezado, BorderLayout.NORTH);
+		labelTituloItem.setText(titulo);
+		return panel;
+		
+	}
 
 	public void actualizaTabla(ResultSet rs) {
 		//tablaModel = new DefaultTableModel();
-		
-		
 			System.out.println(tablaModel.getRowCount());	
 			while(tablaModel.getRowCount()>0){
 				tablaModel.removeRow(0);
@@ -118,13 +153,11 @@ public class PanelListas {
 			// TODO: handle exception
 		}
 	}
-	
 	protected int numeroDeFilas(){
 		int numeroFilas;
 		numeroFilas = tablaModel.getRowCount();
 		System.out.println("Cantidad en tabla: " + tablaModel.getRowCount());
 		return numeroFilas;
-		
 	}
 	
 }
